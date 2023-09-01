@@ -22,12 +22,12 @@ class CSlobs:
 
     # Set overlay visible to TURE
     def setOverlay(self, index):
-        Log.info('Set streamlabs overlay')   
+        #Log.info('Set streamlabs overlay')   
         self.OverlayControl = index
 
     # Set all overlays visible to False
     def removeOverlay(self):
-        Log.info('Remove streamlabs overlay')   
+        #Log.info('Remove streamlabs overlay')   
         self.OverlayControl = 0
 
     # Is any overlay currently active?
@@ -43,7 +43,7 @@ class CSlobs:
     # Main loop for streamlaps operations
     async def _loop(self, connection, sService):
         # All relevant names of stream overlay sources
-        targetNamesContainer = [Settings['GENERAL'][f'SlobsOverlayName_REF1'], Settings['GENERAL'][f'SlobsOverlayName_REF2']]
+        targetNamesContainer = [Settings['GENERAL'][f'SlobsOverlayName_REF1'], Settings['GENERAL'][f'SlobsOverlayName_REF2'], Settings['GENERAL'][f'SlobsOverlayName_REF3']]
         # Endless loop
         while self.Run:
             # Get active scene
