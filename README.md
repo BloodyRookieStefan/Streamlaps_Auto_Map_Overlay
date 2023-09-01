@@ -27,20 +27,34 @@ GameSelection=HLL                                   # Sub folder where the refer
 ScreenResolution = 2560x1440                        # Resolution you are playing with and reference image resolutions
 SlobsOverlayName_REF1 = OverlayIMG_SpawnScreen      # Streamlabs name of source which represents your overlay
 SlobsOverlayName_REF2 = OverlayIMG_IngameMap        # Streamlabs name of source which represents your overlay
+SlobsOverlayName_REF3 = OverlayIMG_MapCommander     # Streamlabs name of source which represents your overlay
 
 # Information about first reference image
-[RESOLUTION_2560x1440_REF_1]
+[RESOLUTION_2560x1440_1]
+Used = 1                                            # Reference setting is used. If not set to false
 SubframeX = 1787                                    # Where to expect the ref image - Start position X
 SubframeY = 713                                     # Where to expect the ref image - Start position Y
 Sensitivity = 20000                                 # Sensitivity value
+RefImageName = 2                                    # Name of reference image to compare to 
 Comment = SPAWN SCREEN                              # Free text
 
 # Information about second reference image
-[RESOLUTION_2560x1440_REF_2]
+[RESOLUTION_2560x1440_2]
+Used = 1                                            # Reference setting is used. If not set to false
 SubframeX = 1642                                    # Where to expect the ref image - Start position X
 SubframeY = 1134                                    # Where to expect the ref image - Start position Y
 Sensitivity = 10000                                 # Sensitivity value
+RefImageName = 2                                    # Name of reference image to compare to 
 Comment = MAP                                       # Free text
+
+# Information about third reference image
+[RESOLUTION_2560x1440_3]    
+Used = 1                                            # Reference setting is used. If not set to false
+SubframeX = 1379                                    # Where to expect the ref image - Start position X
+SubframeY = 1136                                    # Where to expect the ref image - Start position Y
+Sensitivity = 10000                                 # Sensitivity value
+RefImageName = 2                                    # Name of reference image to compare to 
+Comment = MAP_COMMANDER                             # Free text
 ```
 ### pyslobs.ini  
 Connection information for your local Streamlaps installation.  

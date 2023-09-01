@@ -25,43 +25,49 @@ class CScreenCapture:
 
     def doesContainSubImage(self):
         screen_img = self._getNewScreenCapture()
-        # Run trough compare images
-        for k in self.CompareImages:
-            # Check if compare image is set in settings.ini
-            if not f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_REF_{k}' in Settings:
-                raise IndexError(f'Compare image not set in settings.ini - RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_REF_{k}')
+
+        # Run trough 3 parts of settings.ini
+        for i in range(1, 4):
+            # Check if setting in settings.ini can be detected
+            if f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}' not in Settings:
+                raise IndexError(f'Compare image not set in settings.ini - RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}')
+            # Check if reference is used
+            if int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['Used']) == 0:
+                continue
             # Get some position and size values
-            x = int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_REF_{k}']['SubframeX'])
-            y = int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_REF_{k}']['SubframeY'])
-            h = self.CompareImages[k].shape[0]
-            w = self.CompareImages[k].shape[1]
+            refImage = self.CompareImages[Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['RefImageName']]
+            x = int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['SubframeX'])
+            y = int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['SubframeY'])
+            h = refImage.shape[0]
+            w = refImage.shape[1]
+
             # Work on images
             cropped_img = screen_img[y:y+h, x:x+w] # img[y:y+h, x:x+w]
-            diff_img = cv2.absdiff(cropped_img, self.CompareImages[k])
+            diff_img = cv2.absdiff(cropped_img, refImage)
             mask = cv2.cvtColor(diff_img, cv2.COLOR_BGR2GRAY)
             # Apply filter
             th = 5
             imask =  mask>th
-            canvas = np.zeros_like(self.CompareImages[k], np.uint8)
-            canvas[imask] = self.CompareImages[k][imask]
+            canvas = np.zeros_like(refImage, np.uint8)
+            canvas[imask] = refImage[imask]
             # Count black values
             valueCanvas = np.sum(canvas == 0)
             # Debug output
-            if int(k) in self.DebugImages:
+            if int(i) in self.DebugImages:
                 folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..' , 'debug')
                 Path(folder).mkdir(parents=True, exist_ok=True)
-                cv2.imwrite(os.path.join(folder, f"compare_{k}.png"), self.CompareImages[k])
-                cv2.imwrite(os.path.join(folder, f"cropped_{k}.png"), cropped_img)
-                cv2.imwrite(os.path.join(folder, f"diff_{k}.png"), diff_img)
-                cv2.imwrite(os.path.join(folder, f"mask_{k}.png"), mask)
-                cv2.imwrite(os.path.join(folder, f"canvas_{k}.png"), canvas)
+                cv2.imwrite(os.path.join(folder, f"compare_{i}.png"), refImage)
+                cv2.imwrite(os.path.join(folder, f"cropped_{i}.png"), cropped_img)
+                cv2.imwrite(os.path.join(folder, f"diff_{i}.png"), diff_img)
+                cv2.imwrite(os.path.join(folder, f"mask_{i}.png"), mask)
+                cv2.imwrite(os.path.join(folder, f"canvas_{i}.png"), canvas)
                 print('-----------------------------')
-                print(f'valueCanvas ({k}): {str(valueCanvas)}')
-                print('Contains: True' if valueCanvas > int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_REF_{k}']['Sensitivity']) else 'Contains: False')
+                print(f'valueCanvas ({i}): {str(valueCanvas)}')
+                print('Contains: True' if valueCanvas > int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['Sensitivity']) else 'Contains: False')
             
             # Enough pixels met condition?
-            if valueCanvas > int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_REF_{k}']['Sensitivity']):
-                return True, int(k)
+            if valueCanvas > int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['Sensitivity']):
+                return True, int(i)
         return False, -1
 
     # Get new screenshot
