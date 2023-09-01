@@ -1,5 +1,5 @@
 ############################################################################
-# Streamlaps controller
+# streamlabs controller
 # Date: 01.09.2023
 ############################################################################
 
@@ -34,13 +34,13 @@ class CSlobs:
     def isOverlayActive(self):
         return self.OverlayActive
 
-    # Connect to streamlaps
+    # Connect to streamlabs
     async def _connect(self):
         connection = SlobsConnection(config_from_ini())
         sService = ScenesService(connection)
         await asyncio.gather(connection.background_processing(), self._loop(connection, sService))
 
-    # Main loop for streamlaps operations
+    # Main loop for streamlabs operations
     async def _loop(self, connection, sService):
         # All relevant names of stream overlay sources
         targetNamesContainer = [Settings['GENERAL'][f'SlobsOverlayName_REF1'], Settings['GENERAL'][f'SlobsOverlayName_REF2'], Settings['GENERAL'][f'SlobsOverlayName_REF3']]

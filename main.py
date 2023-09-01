@@ -17,7 +17,7 @@ class CController:
         while True:
             contains, index = lib.ScreenCapture.doesContainSubImage()
             if contains and lib.SM.getCurrentState() == lib.States.RELEASED:
-                comment = lib.Settings[f'RESOLUTION_{lib.Settings["GENERAL"]["ScreenResolution"]}_{index}']['Comment']
+                comment = lib.Settings[f'RESOLUTION_{lib.Settings["GENERAL"]["ScreenResolution"]}_{lib.Settings["GENERAL"]["GameSelection"]}_{index}']['Comment']
                 lib.Log.info(f'Set screen overlay - Detected {comment}')
                 lib.SM.moveNext(lib.Commands.LOCK)
                 lib.Streamlabs.setOverlay(index)

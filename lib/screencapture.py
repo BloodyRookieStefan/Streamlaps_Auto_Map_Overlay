@@ -29,15 +29,15 @@ class CScreenCapture:
         # Run trough 3 parts of settings.ini
         for i in range(1, 4):
             # Check if setting in settings.ini can be detected
-            if f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}' not in Settings:
-                raise IndexError(f'Compare image not set in settings.ini - RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}')
+            if f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{Settings["GENERAL"]["GameSelection"]}_{i}' not in Settings:
+                raise IndexError(f'Compare image not set in settings.ini - RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{Settings["GENERAL"]["GameSelection"]}_{i}')
             # Check if reference is used
-            if int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['Used']) == 0:
+            if int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{Settings["GENERAL"]["GameSelection"]}_{i}']['Used']) == 0:
                 continue
             # Get some position and size values
-            refImage = self.CompareImages[Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['RefImageName']]
-            x = int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['SubframeX'])
-            y = int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['SubframeY'])
+            refImage = self.CompareImages[Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{Settings["GENERAL"]["GameSelection"]}_{i}']['RefImageName']]
+            x = int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{Settings["GENERAL"]["GameSelection"]}_{i}']['SubframeX'])
+            y = int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{Settings["GENERAL"]["GameSelection"]}_{i}']['SubframeY'])
             h = refImage.shape[0]
             w = refImage.shape[1]
 
@@ -63,10 +63,10 @@ class CScreenCapture:
                 cv2.imwrite(os.path.join(folder, f"canvas_{i}.png"), canvas)
                 print('-----------------------------')
                 print(f'valueCanvas ({i}): {str(valueCanvas)}')
-                print('Contains: True' if valueCanvas > int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['Sensitivity']) else 'Contains: False')
+                print('Contains: True' if valueCanvas > int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{Settings["GENERAL"]["GameSelection"]}_{i}']['Sensitivity']) else 'Contains: False')
             
             # Enough pixels met condition?
-            if valueCanvas > int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{i}']['Sensitivity']):
+            if valueCanvas > int(Settings[f'RESOLUTION_{Settings["GENERAL"]["ScreenResolution"]}_{Settings["GENERAL"]["GameSelection"]}_{i}']['Sensitivity']):
                 return True, int(i)
         return False, -1
 
